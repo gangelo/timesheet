@@ -44,7 +44,7 @@ module Timesheet
 
       "#{@week_number} - RCMT Timesheet - " \
         "#{format_date(start_date)} thru " \
-          "#{format_date(end_date)}"
+          "#{format_date(end_date)}.xls"
     end
 
     def sandata_filename
@@ -53,7 +53,7 @@ module Timesheet
 
       "#{@week_number} - Sandata Timesheet - " \
         "#{format_date(start_date)} thru " \
-          "#{format_date(end_date)}"
+          "#{format_date(end_date)}.png"
     end
 
     def start_date_for(date)
