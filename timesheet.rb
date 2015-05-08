@@ -5,11 +5,10 @@ require 'date'
 module Timesheet
   # The timesheet class. Generates my timesheet file names.
   class Timesheet
-    attr_reader :date, :week_number
+    attr_reader :date
 
-    def initialize(date, week_number)
+    def initialize(date)
       @date = date
-      @week_number = week_number
       scrub_date
       @date = @date.prev_day if @date.friday?
     end
@@ -30,19 +29,13 @@ module Timesheet
       DateTime.now
     end
 
-    def self.gets_week_number
-      week_number = gets.chomp
-      return week_number unless week_number.empty?
-      week_number.to_i
-    end
-
     protected
 
     def rcmt_filename
       start_date = find_start_date_for(@date, :sunday?)
       end_date = find_end_date_for(@date, :saturday?)
 
-      "#{@week_number} - RCMT Timesheet - " \
+      "#{calendar_week_full} - RCMT Timesheet - " \
         "#{format_date(start_date)} thru " \
           "#{format_date(end_date)}.xls"
     end
@@ -51,7 +44,7 @@ module Timesheet
       start_date = find_start_date_for(@date, :saturday?)
       end_date = find_end_date_for(@date, :friday?)
 
-      "#{@week_number} - Sandata Timesheet - " \
+      "#{calendar_week_full} - Sandata Timesheet - " \
         "#{format_date(start_date)} thru " \
           "#{format_date(end_date)}.png"
     end
@@ -104,6 +97,14 @@ module Timesheet
         @valid = false
       end
     end
+
+    def calendar_week_full
+      "#{@date.cwyear}-#{formated_calendar_week}"
+    end
+
+    def formated_calendar_week
+      "%02d" % @date.cweek
+    end
   end
 end
 
@@ -111,10 +112,7 @@ print 'Enter a date (yyyy-mm-dd) ' \
   'that falls within the week starting/ending dates (blank for current date): '
 date = Timesheet::Timesheet.gets_date
 
-print 'Enter the week number for this timesheet period: '
-week_number = Timesheet::Timesheet.gets_week_number
-
-timesheet = Timesheet::Timesheet.new date, week_number
+timesheet = Timesheet::Timesheet.new date
 timesheet.show
 
 exit 0
