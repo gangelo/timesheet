@@ -19,7 +19,8 @@ module Timesheet
 
     def show
       puts 'The date entered is invalid' && return unless valid?
-      puts rcmt_filename
+      puts mw_invoice_number
+      puts mw_filename
       puts sandata_filename
     end
 
@@ -31,20 +32,27 @@ module Timesheet
 
     protected
 
-    def rcmt_filename
-      start_date = find_start_date_for(@date, :sunday?)
-      end_date = find_end_date_for(@date, :saturday?)
+    def mw_invoice_number
+      start_date = find_start_date_for(@date, :saturday?)
+      end_date = find_end_date_for(@date, :friday?)
 
-      "#{calendar_week_full} - RCMT Timesheet - " \
+      "Mohojo Werks Invoice Number: #{calendar_week_full}"
+    end
+
+    def mw_filename
+      start_date = find_start_date_for(@date, :saturday?)
+      end_date = find_end_date_for(@date, :friday?)
+
+      "#{calendar_week_full} - Mohojo Werks Invoice for " \
         "#{format_date(start_date)} thru " \
-          "#{format_date(end_date)}.xls"
+          "#{format_date(end_date)}.xlsx"
     end
 
     def sandata_filename
       start_date = find_start_date_for(@date, :saturday?)
       end_date = find_end_date_for(@date, :friday?)
 
-      "#{calendar_week_full} - Sandata Timesheet - " \
+      "#{calendar_week_full} - Sandata Timesheet for " \
         "#{format_date(start_date)} thru " \
           "#{format_date(end_date)}.png"
     end
